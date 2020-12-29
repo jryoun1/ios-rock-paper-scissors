@@ -9,7 +9,7 @@ import Foundation
 
 class RockPaperScissorGame {
     func generateComputerRockPaperScissor() -> Int {
-        let computerNumber = Int.random(in : 1...3)
+        let computerNumber = Int.random(in: 1...3)
         return computerNumber
     }
     

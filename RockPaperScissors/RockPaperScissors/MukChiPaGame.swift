@@ -9,7 +9,7 @@ import Foundation
 
 final class MukChiPaGame: RockPaperScissorGame {
     override func judgeWinDrawLose(computerHand: Int, _ userHand: Int, turn: String? = nil) -> String {
-        var result : String = GameError.canNotJudge.localizedDescription
+        var result: String = GameError.canNotJudge.localizedDescription
         guard let winner = turn else {
             return GameError.canNotJudge.localizedDescription
         }
@@ -35,7 +35,7 @@ final class MukChiPaGame: RockPaperScissorGame {
             else {
                 result = Player.computer
             }
-        default :
+        default:
             if userHand == mukChiPa.muk.rawValue {
                 result = Player.user
             }
@@ -56,7 +56,7 @@ final class MukChiPaGame: RockPaperScissorGame {
         print("[\(gamePlayer) 턴] \(GameIntroduction.mukChiPa)", terminator:"")
     }
     
-    func printTurn(by judgement : String) {
+    func printTurn(by judgement: String) {
         switch judgement {
         case Player.user:
             print("\(judgement)의 턴입니다")
@@ -67,7 +67,7 @@ final class MukChiPaGame: RockPaperScissorGame {
         }
     }
     
-    func printMukChiPaResult(by judgement : String) {
+    func printMukChiPaResult(by judgement: String) {
         print(judgement)
     }
 }
