@@ -6,76 +6,12 @@
 
 import Foundation
 
-func printRockPaperScissorGameIntroduction() {
-    print("\(GameIntroduction.rockPaperScissor)", terminator: "")
-}
+private let rockPaperScissorGame = RockPaperScissorGame()
+private let mukChiPaGame = MukChiPaGame()
 
-func printMukChiPaIntroduction(player: String) {
-    print("[\(player) 턴] \(GameIntroduction.mukChiPa)", terminator:"")
-}
-
-func generateComputerRockPaperScissor() -> Int {
-    let computerNumber = Int.random(in : 1...3)
-    return computerNumber
-}
-
-func inputFromUser() -> String {
-    guard let input = readLine() else {
-        return GameError.noInputFromUser.localizedDescription
-    }
-    return input
-}
-
-func verifyInput(input: String) -> String {
-    guard let userInput = Int(input), userInput < 4 && userInput > -1 else {
-        return GameIntroduction.wrongInput
-    }
-    return String(userInput)
-}
-
-func judgmentWinDrawLose(computerHand : Int,_ userHand : Int) -> String {
-    var result: String = GameError.canNotJudge.localizedDescription
-    
-    switch computerHand {
-    case RockPaperScissor.scissor.rawValue:
-        if userHand == RockPaperScissor.scissor.rawValue {
-            result = GameResult.draw
-        }
-        else if userHand == RockPaperScissor.rock.rawValue {
-            result = GameResult.win
-        }
-        else {
-            result = GameResult.lose
-        }
-    case RockPaperScissor.rock.rawValue:
-        if userHand == RockPaperScissor.scissor.rawValue {
-            result = GameResult.lose
-        }
-        else if userHand == RockPaperScissor.rock.rawValue {
-            result = GameResult.draw
-        }
-        else {
-            result = GameResult.win
-        }
-    default:
-        if userHand == RockPaperScissor.scissor.rawValue {
-            result = GameResult.win
-        }
-        else if userHand == RockPaperScissor.rock.rawValue {
-            result = GameResult.lose
-        }
-        else {
-            result = GameResult.draw
-        }
-    }
-    
-    print(result)
-    return result
-}
-
-func startGame() {
-    printRockPaperScissorGameIntroduction()
-    let userInput: String = verifyInput(input: inputFromUser())
+private func startGame() {
+    rockPaperScissorGame.printGameIntroduction()
+    let userInput: String = rockPaperScissorGame.verifyInput(input: rockPaperScissorGame.inputFromUser())
     var result: String?
     
     switch userInput {
@@ -90,7 +26,7 @@ func startGame() {
             print(GameError.unknown.localizedDescription)
             return
         }
-        result = judgmentWinDrawLose(computerHand: generateComputerRockPaperScissor(), userHand)
+        result = rockPaperScissorGame.judgeWinDrawLose(computerHand: rockPaperScissorGame.generateComputerRockPaperScissor(), userHand)
     }
     
     switch result {
@@ -103,62 +39,9 @@ func startGame() {
     }
 }
 
-func printMukChiPaResult(by judgement : String) {
-    print(judgement)
-}
-
-func printTurn(by judgement : String) {
-    switch judgement {
-    case Player.user:
-        print("\(judgement)의 턴입니다")
-    case Player.computer:
-        print("\(judgement)의 턴입니다")
-    default:
-        return
-    }
-}
-
-func judgementMukChiPaWinLose(computerHand : Int,_ userHand : Int, turn : String) -> String {
-    var result : String = GameError.canNotJudge.localizedDescription
-    
-    switch computerHand {
-    case mukChiPa.muk.rawValue:
-        if userHand == mukChiPa.muk.rawValue {
-            result = "\(turn)의 승리!"
-        }
-        else if userHand == mukChiPa.chi.rawValue {
-            result = Player.computer
-        }
-        else {
-            result = Player.user
-        }
-    case mukChiPa.chi.rawValue:
-        if userHand == mukChiPa.muk.rawValue {
-            result = Player.user
-        }
-        else if userHand == mukChiPa.chi.rawValue {
-            result = "\(turn)의 승리!"
-        }
-        else {
-            result = Player.computer
-        }
-    default :
-        if userHand == mukChiPa.muk.rawValue {
-            result = Player.user
-        }
-        else if userHand == mukChiPa.chi.rawValue {
-            result = Player.computer
-        }
-        else {
-            result = "\(turn)의 승리!"
-        }
-    }
-    return result
-}
-
-func startMukChiPa(rockPaperScissorWinner: String) {
-    printMukChiPaIntroduction(player: rockPaperScissorWinner)
-    let userInput: String = verifyInput(input: inputFromUser())
+private func startMukChiPa(rockPaperScissorWinner: String) {
+    mukChiPaGame.printGameIntroduction(player: rockPaperScissorWinner)
+    let userInput: String = mukChiPaGame.verifyInput(input: mukChiPaGame.inputFromUser())
     var judgment: String
     
     switch userInput {
@@ -173,16 +56,19 @@ func startMukChiPa(rockPaperScissorWinner: String) {
             print(GameError.unknown.localizedDescription)
             return
         }
+        judgment = mukChiPaGame.judgeWinDrawLose(computerHand: mukChiPaGame.generateComputerRockPaperScissor(),
+                                                 userHand,
+                                                 turn: rockPaperScissorWinner)
         
-        judgment = judgementMukChiPaWinLose(computerHand : generateComputerRockPaperScissor(),userHand, turn : rockPaperScissorWinner)
-        if judgment == Player.user {
-            printTurn(by : judgment)
+        switch judgment {
+        case Player.user:
+            mukChiPaGame.printTurn(by: judgment)
             startMukChiPa(rockPaperScissorWinner: judgment)
-        } else if judgment == Player.computer {
-            printTurn(by : judgment)
+        case Player.computer:
+            mukChiPaGame.printTurn(by: judgment)
             startMukChiPa(rockPaperScissorWinner: judgment)
-        } else {
-            printMukChiPaResult(by : judgment)
+        default:
+            mukChiPaGame.printMukChiPaResult(by: judgment)
         }
     }
 }
