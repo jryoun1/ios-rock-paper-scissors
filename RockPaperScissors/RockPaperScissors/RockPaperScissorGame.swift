@@ -1,14 +1,13 @@
 //
-//  RockPaperScissor.swift
-//  RockPaperScissors
+//  RockPaperScissorGame.swift
+//  RockPaperScissor
 //
 //  Created by Yeon on 2020/12/29.
 //
 
 import Foundation
 
-class RockPaperScissorGame: GamePlayable {
-    
+class RockPaperScissorGame {
     func generateComputerRockPaperScissor() -> Int {
         let computerNumber = Int.random(in : 1...3)
         return computerNumber
@@ -28,7 +27,7 @@ class RockPaperScissorGame: GamePlayable {
         return String(userInput)
     }
     
-    func judgeWinDrawLose(computerHand: Int,_ userHand: Int, winner: String) -> String {
+    func judgeWinDrawLose(computerHand: Int,_ userHand: Int, turn: String? = nil) -> String {
         var result: String = GameError.canNotJudge.localizedDescription
         
         switch computerHand {
@@ -68,7 +67,7 @@ class RockPaperScissorGame: GamePlayable {
         return result
     }
     
-    func printGameIntroduction() {
+    func printGameIntroduction(player: String? = nil) {
         print("\(GameIntroduction.rockPaperScissor)", terminator: "")
     }
 }
